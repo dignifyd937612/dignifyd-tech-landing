@@ -10,6 +10,95 @@ import "react-international-phone/style.css";
 export default function ContactExperts() {
   const [message, setMessage] = useState("");
   const [phone, setPhone] = useState("");
+  const [phoneError, setPhoneError] = useState("");
+
+  const validateUSPhone = (value) => {
+    return /^\+1\d{10}$/.test(value);
+  };
+
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    companyName: "",
+  });
+
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+     if (!validateUSPhone(phone)) {
+    setPhoneError("Please enter a valid 10-digit US phone number");
+    return;
+  }
+
+  setPhoneError("");
+
+    try {
+      setLoading(true);
+
+      // Split full name into firstName and lastName
+      const nameParts = formData.name.trim().split(/\s+/);
+
+      const firstName = nameParts[0] || "";
+      const lastName = nameParts.slice(1).join(" ") || "N/A";
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/leads`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            firstName,
+            lastName,
+            email: formData.email,
+            companyName: formData.companyName || undefined,
+            phone,
+            requirements: message,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to submit lead");
+      }
+
+      console.log("Lead created:", data);
+
+      // Reset form
+      setFormData({
+        name: "",
+        email: "",
+        companyName: "",
+      });
+
+      setPhone("");
+      setMessage("");
+
+      alert("Thank you! Your request has been submitted successfully.");
+    } catch (error) {
+      console.error("Lead submission error:", error);
+
+      alert(
+        error.message || "Something went wrong. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <section
@@ -73,11 +162,15 @@ export default function ContactExperts() {
             <span className="text-[#119CF0]">Experts</span>
           </h2>
 
-          <form className="mt-10">
+          <form className="mt-10" onSubmit={handleSubmit}>
             <div className="border-b border-[#E1E5EA]">
               <input
                 type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
                 placeholder="Name*"
+                required
                 className="h-[50px] w-full bg-transparent text-[14px] text-[#111827] outline-none placeholder:text-[#7C8798]"
               />
             </div>
@@ -85,7 +178,11 @@ export default function ContactExperts() {
             <div className="mt-5 border-b border-[#E1E5EA]">
               <input
                 type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
                 placeholder="Email*"
+                required
                 className="h-[50px] w-full bg-transparent text-[14px] text-[#111827] outline-none placeholder:text-[#7C8798]"
               />
             </div>
@@ -94,6 +191,9 @@ export default function ContactExperts() {
               <div className="border-b border-[#E1E5EA]">
                 <input
                   type="text"
+                  name="companyName"
+                  value={formData.companyName}
+                  onChange={handleChange}
                   placeholder="Company Name"
                   className="h-[50px] w-full bg-transparent text-[14px] text-[#111827] outline-none placeholder:text-[#7C8798]"
                 />
@@ -101,21 +201,24 @@ export default function ContactExperts() {
 
               <div className="border-b border-[#E1E5EA]">
                 <PhoneInput
-                  defaultCountry="in"
+                  defaultCountry="us"
                   value={phone}
                   onChange={(value) => setPhone(value)}
+                  disableDropdown
                   className="!w-full"
                   inputClassName="!h-[50px] !w-full !border-0 !bg-transparent !text-[14px] !text-[#111827] !outline-none"
                   countrySelectorStyleProps={{
                     buttonClassName:
                       "!h-[50px] !border-0 !bg-transparent !px-0 !pr-2",
                     buttonContentWrapperClassName: "!flex !items-center !gap-2",
-                    dropdownStyleProps: {
-                      className:
-                        "!z-[100] !rounded-xl !border !border-[#E1E5EA] !bg-white !shadow-lg",
-                    },
                   }}
                 />
+
+                {phoneError && (
+                  <p className="mt-1 text-xs text-red-500">
+                    {phoneError}
+                  </p>
+                )}
               </div>
             </div>
 
@@ -126,6 +229,7 @@ export default function ContactExperts() {
                 placeholder="Message*"
                 maxLength={750}
                 rows={1}
+                required
                 className="min-h-[50px] w-full resize-none overflow-hidden bg-transparent pt-3 text-[14px] leading-[1.6] text-[#111827] outline-none placeholder:text-[#7C8798]"
                 onInput={(e) => {
                   e.currentTarget.style.height = "auto";
@@ -152,15 +256,18 @@ export default function ContactExperts() {
 
             <button
               type="submit"
-              className="group mt-8 inline-flex h-[48px] items-center gap-3 rounded-full bg-gradient-to-r from-[#0EA5FF] to-[#09BDD8] px-8 text-[15px] font-semibold text-white transition-all duration-300 hover:shadow-[0_10px_28px_rgba(14,165,255,0.28)]"
+              disabled={loading}
+              className="group mt-8 inline-flex h-[48px] items-center gap-3 rounded-full bg-gradient-to-r from-[#0EA5FF] to-[#09BDD8] px-8 text-[15px] font-semibold text-white transition-all duration-300 hover:shadow-[0_10px_28px_rgba(14,165,255,0.28)] disabled:cursor-not-allowed disabled:opacity-60"
             >
-              <span>Submit</span>
+              <span>{loading ? "Submitting..." : "Submit"}</span>
 
-              <ChevronRight
-                size={19}
-                strokeWidth={2}
-                className="transition-transform duration-300 group-hover:translate-x-1"
-              />
+              {!loading && (
+                <ChevronRight
+                  size={19}
+                  strokeWidth={2}
+                  className="transition-transform duration-300 group-hover:translate-x-1"
+                />
+              )}
             </button>
           </form>
         </div>
