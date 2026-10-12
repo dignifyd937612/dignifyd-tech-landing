@@ -19,7 +19,7 @@ export default function TechnologyPartnerBanner() {
               move faster, work smarter, and scale confidently.
             </p>
 
-            <Link
+            <a
               href="#contact"
               className="mt-6 inline-flex h-[38px] items-center justify-center gap-2 rounded-full bg-white px-6 text-[13px] font-semibold text-[#182231] shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(0,0,0,0.12)]"
             >
@@ -28,7 +28,7 @@ export default function TechnologyPartnerBanner() {
               <span className="text-[17px] leading-none">
                 <MoveRight size={20} />{" "}
               </span>
-            </Link>
+            </a>
           </div>
         </div>
 

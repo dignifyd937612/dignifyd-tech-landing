@@ -32,12 +32,12 @@ export default function TrustedSolutions() {
               what to build, in what order, and what it costs.
             </p>
 
-            <Link
+            <a
               href="#contact"
               className="mx-auto mt-5 inline-flex h-[40px] items-center justify-center rounded-full bg-[#0EA5FF] px-6 text-[14px] leading-[20px] font-bold text-white transition-all duration-300 hover:bg-[#078de0] hover:shadow-[0_10px_30px_rgba(14,165,255,0.25)] sm:mx-0 sm:mt-6 sm:h-[40px] sm:px-6 sm:text-[14px] md:mt-6 md:h-[42px] md:px-7 md:text-[15px] lg:mt-5 lg:h-[40px] lg:px-7 lg:text-[16px] xl:mt-5 xl:h-[40px] xl:px-7 xl:text-[16px] 2xl:mt-6 2xl:h-[44px] 2xl:px-8 2xl:text-[16px]"
             >
               Help me Choose
-            </Link>
+            </a>
           </div>
 
           <div className="grid w-full grid-cols-3 items-center justify-items-center gap-2 sm:gap-4 md:gap-5 lg:gap-5 xl:gap-7 2xl:gap-10">

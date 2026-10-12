@@ -77,7 +77,7 @@ export default function HeroSection() {
         </div>
 
         <div className="mt-5 flex w-full max-w-[340px] flex-col items-stretch justify-center gap-3 sm:mt-3.5 sm:w-auto sm:max-w-none sm:flex-row sm:items-center sm:gap-2 md:mt-4 md:gap-2.5 lg:mt-4 lg:gap-2.5 xl:mt-5 xl:gap-3 2xl:mt-5 2xl:gap-3.5">
-          <Link
+          <a
             href="#contact"
             className="group relative flex h-[50px] w-full items-center justify-center rounded-full bg-[#119CF0] px-5 text-[20px] lg:text-[15px] font-medium text-white transition-all duration-300 hover:bg-[#078de0] hover:shadow-[0_10px_30px_rgba(17,156,240,0.25)] sm:h-[35px] sm:w-auto sm:px-5 md:h-[37px] md:px-5 lg:h-[39px] lg:px-6 xl:h-[42px] xl:px-6 2xl:h-[46px] 2xl:px-7"
           >
@@ -89,7 +89,7 @@ export default function HeroSection() {
                 className="h-[12px] w-[12px] sm:h-[10px] sm:w-[10px] md:h-[11px] md:w-[11px] lg:h-[11px] lg:w-[11px] xl:h-[13px] xl:w-[13px] 2xl:h-[14px] 2xl:w-[14px]"
               />
             </span>
-          </Link>
+          </a>
 
           <Link
             href="#our_services"
